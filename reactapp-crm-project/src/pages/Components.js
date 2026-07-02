@@ -1,5 +1,4 @@
 import './../App.css';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from 'react';
 
 // Bootstrap Component
@@ -364,59 +363,10 @@ class Callout extends React.Component {
   }
 }
 
-const Counter = () => {
-  const [count, setCount] = useState(0);
-  return (
-    <button type="button" className="btn btn-secondary" data-bs-toggle="tooltip" title="Tooltip text" onClick={() => setCount(count + 1)}>
-      {count}
-    </button>
-  );
-};
 
-const Clock = () => {
-  const [time, setTime] = useState(null);
 
-  useEffect(() => {
-    // setInterval(()=>{
-    //   const now = new Date();
-    //   setTime(`${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`);
-    // },1000);
-    console.log("run")
-    setTime()
-  }, []);
-  return (
-    <button type="button" className="btn btn-secondary" data-bs-toggle="tooltip" title="Tooltip text">
-      <h1>{time}</h1>
-    </button>
-  );
-};
 
-const NewCounter = () => {
-  const [A, updateA] = useState(0);
 
-  return (
-    <button className='btn btn-primary' onClick={() => { updateA(A + 1) }}>
-      <p className='mb-0'>Count: {A}</p>
-    </button>
-  );
-}
-
-function UserData() {
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    // This code runs AFTER the component shows up on the screen
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(res => res.json())
-      .then(data => {
-        setUserData(data);
-        console.log(data)
-      }
-      );
-  }, []); // 👈 The empty array means "only run this once when the page loads"
-
-  return <div>{userData ? userData[0].name : "Loading..."}</div>;
-}
 
 export const ComponentPractice = () => {
   return (
@@ -560,11 +510,6 @@ export const ComponentPractice = () => {
       </div>
       <div className='custom-row'>
       </div>
-
-      <section className="react-body">
-        <Counter />
-        <Clock />
-      </section>
     </section>
   );
 }

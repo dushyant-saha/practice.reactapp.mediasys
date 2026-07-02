@@ -52,10 +52,10 @@ export default function RootLayout() {
           <li><a className="dropdown-item cursor-default fw-bold">Topics</a></li>
           <li><hr className="dropdown-divider" /></li>
           <li><NavLink className="dropdown-item" to='/practice-components'>Component Practice</NavLink></li>
-          <li><NavLink className="dropdown-item" to='/practice-components'>Component Practice</NavLink></li>
+          <li><NavLink className="dropdown-item" to='/practice-hooks'>Hooks Practice</NavLink></li>
         </NavDropdown>
         {/* <Navlink title="Component List" pagePath="/component_list"></Navlink> */}
-        <Navlink title="Link-C" pagePath="/about"></Navlink>
+        <Navlink title="About" pagePath="/about"></Navlink>
         <NavDropdown
           style="login"
           title={<svg xmlns="http://www.w3.org/2000/svg" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
