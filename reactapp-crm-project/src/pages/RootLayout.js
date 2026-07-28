@@ -63,7 +63,7 @@ export default function RootLayout() {
           <li><a className="dropdown-item cursor-default">Login Actions</a></li>
           <li><hr className="dropdown-divider" /></li>
           <li><a className="dropdown-item" href="#">Sign Up</a></li>
-          <li><a className="dropdown-item" href="#">Sign In</a></li>
+          <li><NavLink className="dropdown-item" to='/signin'>Sign In</NavLink></li>
           <li><a className="dropdown-item" href="#">Logout</a></li>
         </NavDropdown>
       </Navbar>

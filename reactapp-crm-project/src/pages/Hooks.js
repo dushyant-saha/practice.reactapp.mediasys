@@ -2,6 +2,7 @@ import './../App.css';
 import React, { useState, useEffect } from 'react';
 import Tooltip from 'bootstrap/js/src/tooltip';
 
+
 const Counter = () => {
   const [count, setCount] = useState(0);
 
@@ -97,19 +98,30 @@ function UserData() {
 
 
 const Clock = () => {
-  const [time, setTime] = useState(null);
+  const [time, setTime] = useState("");
 
   useEffect(() => {
-    setInterval(()=>{
+    setInterval(() => {
       const now = new Date();
-      setTime(`${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`);
-    },1000);
+      // setTime(`${now.getHours()+5}:${now.getMinutes()+30}:${now.getSeconds()}`);
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Kolkata',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: false
+      }).format(now);
+      
+      setTime(`${formatter}`);
+    }, 1000);
     console.log("run")
-    setTime()
+    setTime();
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
   }, []);
   return (
     <button type="button" className="btn btn-secondary" data-bs-toggle="tooltip" title="Tooltip text">
-      <h1>{time}</h1>
+      <h1>GMT +5:30/ IST Time => {time}</h1>
     </button>
   );
 };
@@ -126,6 +138,7 @@ const NewCounter = () => {
 
 
 export const HookPractice = () => {
+  
   return (
     <section>
       <div className='custom-row'>

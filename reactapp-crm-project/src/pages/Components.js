@@ -1,5 +1,7 @@
 import './../App.css';
 import React, { useState, useEffect } from 'react';
+//useContext practice import statements=========
+import { ThemeContext } from './UseContext';
 
 // Bootstrap Component
 class Grid extends React.Component {
@@ -25,7 +27,7 @@ class Grid extends React.Component {
 /** */
 const Accordion = ({ children, id }) => {
   return (
-    <div className="accordion" id={id} data-bs-theme="dark">
+    <div className="accordion" id={id} >
       {children}
     </div>
   );
@@ -369,148 +371,153 @@ class Callout extends React.Component {
 
 
 export const ComponentPractice = () => {
+  const [theme, setTheme] = useState('light');
+
   return (
-    <section>
-      <div className='custom-row'>
-        <h2 className=''>Grid</h2>
-        <Grid />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Callout</h2>
-        <Callout></Callout>
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Tooltip</h2>
-        <Tooltip />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Accordion</h2>
-        <Accordion id="accordionExample">
-          <div className="accordion-item">
-            <h2 className="accordion-header">
-              <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                Accordion Item
-              </button>
-            </h2>
-            <div id="collapseOne" className="accordion-collapse collapse"  data-bs-parent="#accordionExample">
-              <div className="accordion-body">
-                Content
+    <ThemeContext.Provider value={theme}>
+
+      <section>
+        <div className='custom-row'>
+          <h2 className=''>Grid</h2>
+          <Grid />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Callout</h2>
+          <Callout></Callout>
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Tooltip</h2>
+          <Tooltip />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Accordion</h2>
+          <Accordion id="accordionExample">
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                  Accordion Item
+                </button>
+              </h2>
+              <div id="collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div className="accordion-body">
+                  Content
+                </div>
               </div>
             </div>
-          </div>
-          <div className="accordion-item">
-            <h2 className="accordion-header">
-              <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                Accordion Item
-              </button>
-            </h2>
-            <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div className="accordion-body">
-                Content
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                  Accordion Item
+                </button>
+              </h2>
+              <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div className="accordion-body">
+                  Content
+                </div>
               </div>
             </div>
-          </div>
-          <div className="accordion-item">
-            <h2 className="accordion-header">
-              <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
-                Accordion Item
-              </button>
-            </h2>
-            <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div className="accordion-body">
-                Content
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                  Accordion Item
+                </button>
+              </h2>
+              <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div className="accordion-body">
+                  Content
+                </div>
               </div>
             </div>
-          </div>
-        </Accordion>
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Alert</h2>
-        <Alert />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Badge</h2>
-        <Badge />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Breadcrumb</h2>
-        <Breadcrumb />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Button</h2>
-        <Button />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>ButtonGroup</h2>
-        <ButtonGroup />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Card</h2>
-        <Card />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Carousel</h2>
-        <Carousel />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>CloseButton</h2>
-        <CloseButton />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Collapse</h2>
-        <Collapse />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Dropdown</h2>
-        <Dropdown />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>ListGroup</h2>
-        <ListGroup />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Modal</h2>
-        <Modal />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>NavTabs</h2>
-        <NavTabs />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Offcanvas</h2>
-        <Offcanvas />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Pagination</h2>
-        <Pagination />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Placeholder</h2>
-        <Placeholder />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Popover</h2>
-        <Popover />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Progress</h2>
-        <Progress />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Scrollspy</h2>
-        <Scrollspy />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Spinner</h2>
-        <Spinner />
-      </div>
-      <div className='custom-row'>
-        <h2 className='mt-5'>Tooltip</h2>
-        <Tooltip />
-      </div>
-      <div className='custom-row'>
-      </div>
-    </section>
+          </Accordion>
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Alert</h2>
+          <Alert />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Badge</h2>
+          <Badge />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Breadcrumb</h2>
+          <Breadcrumb />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Button</h2>
+          <Button />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>ButtonGroup</h2>
+          <ButtonGroup />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Card</h2>
+          <Card />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Carousel</h2>
+          <Carousel />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>CloseButton</h2>
+          <CloseButton />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Collapse</h2>
+          <Collapse />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Dropdown</h2>
+          <Dropdown />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>ListGroup</h2>
+          <ListGroup />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Modal</h2>
+          <Modal />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>NavTabs</h2>
+          <NavTabs />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Offcanvas</h2>
+          <Offcanvas />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Pagination</h2>
+          <Pagination />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Placeholder</h2>
+          <Placeholder />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Popover</h2>
+          <Popover />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Progress</h2>
+          <Progress />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Scrollspy</h2>
+          <Scrollspy />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Spinner</h2>
+          <Spinner />
+        </div>
+        <div className='custom-row'>
+          <h2 className='mt-5'>Tooltip</h2>
+          <Tooltip />
+        </div>
+        <div className='custom-row'>
+        </div>
+      </section>
+    </ThemeContext.Provider>
   );
 }
 
