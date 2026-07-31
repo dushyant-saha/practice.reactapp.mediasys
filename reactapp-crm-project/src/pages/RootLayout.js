@@ -53,6 +53,7 @@ export default function RootLayout() {
           <li><hr className="dropdown-divider" /></li>
           <li><NavLink className="dropdown-item" to='/practice-components'>Component Practice</NavLink></li>
           <li><NavLink className="dropdown-item" to='/practice-hooks'>Hooks Practice</NavLink></li>
+          <li><NavLink className="dropdown-item" to='/legacy-code'>Legacy Code Conversion</NavLink></li>
         </NavDropdown>
         {/* <Navlink title="Component List" pagePath="/component_list"></Navlink> */}
         <Navlink title="About" pagePath="/about"></Navlink>

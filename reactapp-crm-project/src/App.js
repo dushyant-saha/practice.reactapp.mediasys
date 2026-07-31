@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 //Component imports
 import {ComponentPractice} from './pages/Components';
 import {HookPractice} from './pages/Hooks';
+import {LegacyPractice} from './pages/LegacyCodeConversion';
 import RootLayout from './pages/RootLayout';
 import {Home} from './pages/Home';
 import {About} from './pages/About';
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
             { path: '/about', element: <About/> },
             { path: '/practice-components', element: <ComponentPractice/> },
             { path: '/practice-hooks', element: <HookPractice/> },
+            { path: '/legacy-code', element: <LegacyPractice/> },
         ],
     },
 ]);
