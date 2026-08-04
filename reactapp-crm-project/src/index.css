@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Geomini:wght@200..800&display=swap');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -14,7 +15,8 @@ code {
 }
 
 /* App.js styling */
-.navbar>.container-fluid, .custom-row {
+.navbar>.container-fluid,
+.custom-row {
   max-width: 60rem;
 }
 
@@ -60,8 +62,8 @@ nav.navbar {
   height: 30px;
 }
 
-.cursor-default{
-  cursor:default !important;
+.cursor-default {
+  cursor: default !important;
 }
 
 /*Login Page Styling*/
@@ -153,52 +155,229 @@ nav.navbar {
 
 /* Legacy Code Styling*/
 .red {
-    color: red
+  color: red
 }
 
 .green {
-    color: green
+  color: green
 }
 
 .blue {
-    color: blue
+  color: blue
 }
 
 .yellow {
-    color: yellow
+  color: yellow
 }
-.row {
-            display: flex;
-        }
 
-        .base-page {
-            max-width: 60rem;
-            margin: 0 auto;
-            color: beige;
-            border: solid 2px orange;
-            border-radius: 8px;
-            padding: 10px 12px
-        }
-        .block{
-            background-color: #4c4c4c;
-            font-family: "Geomini", sans-serif;
-            color: black;
-            padding:15px;
-            margin-top:15px;
-            transition: all ease-in-out 300ms;
-            border-radius: 12px;
-        }
-        .block:hover{
-            box-shadow: 0px 0px 5px white;
-        }
-        .block h1{
-            margin-top:0;
-        }
-        .font-Geomini{
-            font-family: "Geomini", sans-serif;
-        }
-        .highlight-orange{
-            color:orange;
-            font-weight: bold;
-            font-size:1.2em;
-        }
+.row {
+  display: flex;
+}
+
+.base-page {
+  max-width: 60rem;
+  margin: 0 auto;
+  color: beige;
+  border: solid 2px orange;
+  border-radius: 8px;
+  padding: 10px 12px
+}
+
+.block {
+  background-color: #4c4c4c;
+  font-family: "Geomini", sans-serif;
+  color: black;
+  padding: 15px;
+  margin-top: 15px;
+  transition: all ease-in-out 300ms;
+  border-radius: 12px;
+}
+
+.block:hover {
+  box-shadow: 0px 0px 5px white;
+}
+
+.block h1 {
+  margin-top: 0;
+}
+
+.font-Geomini {
+  font-family: "Geomini", sans-serif;
+}
+
+.highlight-orange {
+  color: orange;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+
+/*Todo App Styling*/
+/*------------------------*/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 550px;
+  margin: 0 auto 32px auto;
+  position: relative;
+}
+
+.inner-form {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  padding: 12px 16px;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.inner-form.expanded {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-color: transparent;
+}
+
+/* Inputs */
+.input-title,
+.input-note {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+  color: #202124;
+  background: transparent;
+}
+
+.input-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.input-title::placeholder {
+  color: #5f6368;
+  font-weight: 500;
+}
+
+.input-note {
+  font-size: 0.95rem;
+  resize: none;
+  min-height: 24px;
+}
+
+.input-note::placeholder {
+  color: #5f6368;
+}
+
+/* Bottom Action Bar */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 8px;
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  color: #202124;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 8px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.close-button:hover {
+  background-color: #f1f3f4;
+}
+
+/* Todo Saved NOtes LIst*/
+.todo-list-container {
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty-message {
+  text-align: center;
+  color: #888888;
+  font-size: 0.95rem;
+  padding: 32px 0;
+}
+
+/* Individual Card Styling */
+.todo-card {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #4f46e5;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.todo-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+}
+
+/* Content Area */
+.todo-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.todo-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.4;
+}
+
+.todo-card-note {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+/* Delete Action Button */
+.delete-btn {
+  background: transparent;
+  border: 1px solid #fecaca;
+  color: #ef4444;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: all 0.15s ease;
+}
+
+.delete-btn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}

@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 import {ComponentPractice} from './pages/Components';
 import {HookPractice} from './pages/Hooks';
 import {LegacyPractice} from './pages/LegacyCodeConversion';
+import TodoApp from './pages/TodoApp';
 import RootLayout from './pages/RootLayout';
 import {Home} from './pages/Home';
 import {About} from './pages/About';
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
             { path: '/practice-components', element: <ComponentPractice/> },
             { path: '/practice-hooks', element: <HookPractice/> },
             { path: '/legacy-code', element: <LegacyPractice/> },
+            { path: '/todo', element: <TodoApp/> },
         ],
     },
 ]);
