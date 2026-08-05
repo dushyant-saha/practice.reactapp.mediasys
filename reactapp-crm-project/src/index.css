@@ -281,7 +281,7 @@ nav.navbar {
   padding-top: 8px;
 }
 
-.close-button {
+.form-button {
   background: transparent;
   border: none;
   color: #202124;
@@ -293,7 +293,7 @@ nav.navbar {
   transition: background-color 0.15s ease;
 }
 
-.close-button:hover {
+.form-button:hover {
   background-color: #f1f3f4;
 }
 
@@ -360,10 +360,8 @@ nav.navbar {
 }
 
 /* Delete Action Button */
-.delete-btn {
+.delete-btn, .edit-btn {
   background: transparent;
-  border: 1px solid #fecaca;
-  color: #ef4444;
   font-size: 0.8rem;
   font-weight: 500;
   padding: 6px 12px;
@@ -373,8 +371,24 @@ nav.navbar {
   transition: all 0.15s ease;
 }
 
+.delete-btn{
+  border: 1px solid #fecaca;
+  color: #ef4444;
+  
+}
+
 .delete-btn:hover {
   background-color: #ef4444;
   color: #ffffff;
   border-color: #ef4444;
+}
+
+.edit-btn{
+  border: 1px solid rgb(170, 170, 255);
+  color: blue;
+}
+
+.edit-btn:hover{
+  background-color: yellow;
+  border-color: yellow;
 }
