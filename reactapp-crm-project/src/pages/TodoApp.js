@@ -1,23 +1,73 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 function TodoForm(props) {
+  const handleItemChange = (index, value) => {
+    const updated = [...props.noteItems];
+    updated[index].text = value;
+    props.setNoteItems(updated);
+  };
+
+  // Toggle checkbox state in the form
+  const handleToggle = (index) => {
+    const updated = [...props.noteItems];
+    updated[index].completed = !updated[index].completed;
+    props.setNoteItems(updated);
+  };
+
+  // Add new line on Enter key
+  const handleKeyDown = (e, index) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const updated = [...props.noteItems];
+      updated.splice(index + 1, 0, { id: Date.now(), text: '', completed: false });
+      props.setNoteItems(updated);
+    } else if (e.key === 'Backspace' && props.noteItems[index].text === '' && props.noteItems.length > 1) {
+      e.preventDefault();
+      const updated = props.noteItems.filter((arrayElement, itemIndex) => itemIndex !== index);
+      props.setNoteItems(updated);
+    }
+  };
+
   return (
     <form className={`inner-form ${props.isExpanded ? 'expanded' : ''}`}>
-
       {props.isExpanded && (
-        <input type="text" placeholder="Title" className="input-title" value={props.title} onChange={(e) => props.setTitle(e.target.value)} />
+        <input
+          type="text"
+          placeholder="Title"
+          className="input-title"
+          value={props.title}
+          onChange={(e) => props.setTitle(e.target.value)}
+        />
       )}
 
-      <textarea placeholder="Take a note..." className="input-note" rows={props.isExpanded ? 3 : 1} value={props.note} onFocus={() => props.setIsExpanded(true)} onChange={(e) => props.setNote(e.target.value)} />
+      {/*Checkbox List in Form */}
+      <div className="note-items-container" onClick={() => props.setIsExpanded(true)}>
+        {props.noteItems.map((item, index) => (
+          <div key={item.id} className="todo-input-row">
+            {props.isExpanded && (
+              <input
+                type="checkbox"
+                checked={item.completed}
+                onChange={() => handleToggle(index)}
+              />
+            )}
+            <input
+              type="text"
+              placeholder={index === 0 ? "Take a note..." : "List item"}
+              className={`input-note-line ${item.completed ? 'completed' : ''}`}
+              value={item.text}
+              onFocus={() => props.setIsExpanded(true)}
+              onChange={(e) => handleItemChange(index, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+            />
+          </div>
+        ))}
+      </div>
 
       {props.isExpanded && (
         <div className="form-actions">
-          <button type="button" className="form-button" onClick={props.handleSave}>
-            Save
-          </button>
-          <button type="button" className="form-button" onClick={props.handleClose}>
-            Close
-          </button>
+          <button type="button" className="form-button" onClick={props.handleSave}>Save</button>
+          <button type="button" className="form-button" onClick={props.handleClose}>Close</button>
         </div>
       )}
     </form>
@@ -29,121 +79,150 @@ function TodoItem(props) {
     <li className="todo-card" onDoubleClick={() => props.editHandler(props.id)}>
       <div className="todo-card-body">
         <div className="todo-card-title">{props.title}</div>
-        {props.note && (
-          <div className="todo-card-note">{props.note}</div>
-        )}
+        
+        {/* Render checklist items */}
+        <div className="todo-card-checklist">
+          {props.noteItems && props.noteItems.map((item) => (
+            <label key={item.id} className="checklist-row">
+              <input
+                type="checkbox"
+                checked={item.completed}
+                onChange={() => props.toggleTaskHandler(props.id, item.id)}
+              />
+              <span className={item.completed ? 'completed-text' : ''}>
+                {item.text}
+              </span>
+            </label>
+          ))}
+        </div>
       </div>
-      {!props.isExpanded && <button onClick={() => props.editHandler(props.id)} className="edit-btn">Edit</button>}
+
+      <button onClick={() => props.editHandler(props.id)} className="edit-btn">Edit</button>
       <button onClick={() => props.deleteHandler(props.id)} className="delete-btn">Delete</button>
     </li>
   );
 }
 
 export default function TodoApp() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    try {
+      const saved = localStorage.getItem('my_todos');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [title, setTitle] = useState('');
-  const [note, setNote] = useState('');
+  
+  // Default to one empty line item
+  const [noteItems, setNoteItems] = useState([
+    { id: Date.now(), text: '', completed: false }
+  ]);
 
   const formRef = useRef(null);
   const editRef = useRef(null);
 
-  // Load saved notes
   useEffect(() => {
-    console.log("load")
-    const saved = localStorage.getItem('my_todos');
-    if (saved) setTodos(JSON.parse(saved));
-  }, []);
-
-  // Saving notes
-  useEffect(() => {
-    //if()
     localStorage.setItem('my_todos', JSON.stringify(todos));
-    console.log("SAVE N CLEAR on every todo change")
   }, [todos]);
 
-  // Collapse and save on outside click
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (formRef.current && !formRef.current.contains(event.target)) {
-        if (title.trim() || note.trim()) {
-          saveTodo(editRef.current);
-        }
-        setIsExpanded(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [title, note]);
+  const resetForm = () => {
+    setTitle('');
+    setNoteItems([{ id: Date.now(), text: '', completed: false }]);
+    editRef.current = null;
+    setIsExpanded(false);
+  };
 
-  // Saving for code for todo item
   const saveTodo = (id) => {
-    debugger;
-    if (!title.trim() && !note.trim()) return;
+    // Filter out completely empty lines
+    const cleanedItems = noteItems.filter((item) => item.text.trim() !== '');
+    const trimmedTitle = title.trim();
 
-    if(!id){
+    if (!trimmedTitle && cleanedItems.length === 0) {
+      resetForm();
+      return;
+    }
+
+    if (!id) {
       const newTodo = {
         id: Date.now(),
-        title: title.trim() || 'Untitled Note',
-        note: note.trim(),
+        title: trimmedTitle || 'Untitled Note',
+        noteItems: cleanedItems,
       };
-  
-      setTodos([newTodo, ...todos]);
-    }else{
-      const editedTodoList = todos.map((list)=>{
-       return list.id === id ? {...list, title:title, note:note} : list;
-      });
-      setTodos(editedTodoList);
-      editRef.current = null;
+      setTodos((prev) => [newTodo, ...prev]);
+    } else {
+      setTodos((prev) =>
+        prev.map((item) =>
+          item.id === id
+            ? { ...item, title: trimmedTitle || 'Untitled Note', noteItems: cleanedItems }
+            : item
+        )
+      );
     }
-    setTitle('');
-    setNote('');
+
+    resetForm();
   };
 
-  //Event handlers:
-  const handleClose = (e) => {
-    e.preventDefault();
-    setIsExpanded(false);
-  };
-
-  const handleSave = (e) => {
-    e.preventDefault();
-    debugger;
-    saveTodo(editRef.current);
-    setIsExpanded(false);
+  // Direct toggle on a saved card item
+  const handleToggleTask = (todoId, taskId) => {
+    setTodos((prev) =>
+      prev.map((todo) => {
+        if (todo.id !== todoId) return todo;
+        return {
+          ...todo,
+          noteItems: todo.noteItems.map((task) =>
+            task.id === taskId ? { ...task, completed: !task.completed } : task
+          ),
+        };
+      })
+    );
   };
 
   const handleEditTodo = (id) => {
-    setIsExpanded(true);
-    const todoItem = todos.find(todo => todo.id == id);
-    // setTodos(todos.filter((todo) => todo.id !== id));
-    setTitle(todoItem.title);
-    setNote(todoItem.note);
-    editRef.current = id;
-  };
+    const todoItem = todos.find((todo) => todo.id === id);
+    if (!todoItem) return;
 
-  const handleDeleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    setTitle(todoItem.title);
+    setNoteItems(
+      todoItem.noteItems.length > 0
+        ? todoItem.noteItems
+        : [{ id: Date.now(), text: '', completed: false }]
+    );
+    editRef.current = id;
+    setIsExpanded(true);
   };
 
   return (
     <div style={{ padding: '20px' }}>
       <div className="form-container" ref={formRef}>
-        <TodoForm isExpanded={isExpanded} note={note} title={title} setIsExpanded={setIsExpanded} setNote={setNote} setTitle={setTitle} handleSave={handleSave} handleClose={handleClose}/>
+        <TodoForm
+          isExpanded={isExpanded}
+          noteItems={noteItems}
+          title={title}
+          setIsExpanded={setIsExpanded}
+          setNoteItems={setNoteItems}
+          setTitle={setTitle}
+          handleSave={() => saveTodo(editRef.current)}
+          handleClose={resetForm}
+        />
       </div>
 
-      {/* Todo List Cards LIst */}
       <div className="todo-list-container">
-        {todos.length === 0 ? (
-          <p className="empty-message">No notes saved yet. Add one above!</p>
-        ) : (
-          <ul className="todo-list">
-            {todos.map((todo) => (
-              <TodoItem key={todo.id} id={todo.id} title={todo.title} note={todo.note} deleteHandler={handleDeleteTodo} editHandler={handleEditTodo} isExpanded={isExpanded}/>
-            ))}
-          </ul>
-        )}
+        <ul className="todo-list">
+          {todos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              id={todo.id}
+              title={todo.title}
+              noteItems={todo.noteItems}
+              deleteHandler={(id) => setTodos((prev) => prev.filter((t) => t.id !== id))}
+              editHandler={handleEditTodo}
+              toggleTaskHandler={handleToggleTask}
+            />
+          ))}
+        </ul>
       </div>
     </div>
   );

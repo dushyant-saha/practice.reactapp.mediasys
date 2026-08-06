@@ -392,3 +392,62 @@ nav.navbar {
   background-color: yellow;
   border-color: yellow;
 }
+
+/* ------------*/
+
+
+/* Card Checklist Styling */
+.card-checklist {
+  list-style: none;
+  padding: 0;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.checklist-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #4f46e5;
+  cursor: pointer;
+}
+
+.checklist-text {
+  font-size: 0.875rem;
+  color: #334155;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+
+/* Strikethrough style when checked */
+.checklist-text.striked {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.todo-input-row,
+.checklist-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.input-note-line {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.completed,
+.completed-text {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
