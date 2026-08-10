@@ -1,229 +1,131 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-function TodoForm(props) {
-  const handleItemChange = (index, value) => {
-    const updated = [...props.noteItems];
-    updated[index].text = value;
-    props.setNoteItems(updated);
-  };
 
-  // Toggle checkbox state in the form
-  const handleToggle = (index) => {
-    const updated = [...props.noteItems];
-    updated[index].completed = !updated[index].completed;
-    props.setNoteItems(updated);
-  };
 
-  // Add new line on Enter key
-  const handleKeyDown = (e, index) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const updated = [...props.noteItems];
-      updated.splice(index + 1, 0, { id: Date.now(), text: '', completed: false });
-      props.setNoteItems(updated);
-    } else if (e.key === 'Backspace' && props.noteItems[index].text === '' && props.noteItems.length > 1) {
-      e.preventDefault();
-      const updated = props.noteItems.filter((arrayElement, itemIndex) => itemIndex !== index);
-      props.setNoteItems(updated);
+export default function TodoApp() {
+  console.log("refresh")
+  const [todos, setTodos] = useState(() => {
+    try {
+      console.log("useState todos")
+      const savedTodos = localStorage.getItem('my_todos');
+      return savedTodos ? JSON.parse(savedTodos) : [];
     }
+    catch {
+      return [];
+    }
+  });
+  const [inputValue, setInputValue] = useState('');
+  const [editState, setEditState] = useState([false, null]);
+  const editIdRef = useRef("");
+
+  useEffect(() => {
+    console.log("useEffect localStorage.setItem")
+    localStorage.setItem('my_todos', JSON.stringify(todos));
+  }, [todos]);
+
+
+  const handleEditTodo = (id) => {
+    const updatedText = editIdRef.current;
+    if (updatedText.trim()) {
+      setTodos(
+        todos.map((todo) =>
+          todo.id === id ? { ...todo, text: updatedText } : todo
+        )
+      );
+    }
+    // Reset edit state back to default
+    setEditState([false, null]);
+  };
+
+  const handleAddTodo = (e) => {
+    e.preventDefault();
+    console.log('handleAddTodo');
+    if (!inputValue.trim()) return;
+
+    const newTodo = {
+      id: Date.now(),
+      text: inputValue,
+      completed: false
+    };
+
+    setTodos([...todos, newTodo]);
+    setInputValue('');
+  };
+
+  const handleToggleTodo = (id) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+  // console.log(todos);
+  const handleDeleteTodo = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   return (
-    <form className={`inner-form ${props.isExpanded ? 'expanded' : ''}`}>
-      {props.isExpanded && (
-        <input
-          type="text"
-          placeholder="Title"
-          className="input-title"
-          value={props.title}
-          onChange={(e) => props.setTitle(e.target.value)}
-        />
-      )}
+    <section className='custom-row'>
 
-      {/*Checkbox List in Form */}
-      <div className="note-items-container" onClick={() => props.setIsExpanded(true)}>
-        {props.noteItems.map((item, index) => (
-          <div key={item.id} className="todo-input-row">
-            {props.isExpanded && (
-              <input
-                type="checkbox"
-                checked={item.completed}
-                onChange={() => handleToggle(index)}
-              />
-            )}
-            <input
-              type="text"
-              placeholder={index === 0 ? "Take a note..." : "List item"}
-              className={`input-note-line ${item.completed ? 'completed' : ''}`}
-              value={item.text}
-              onFocus={() => props.setIsExpanded(true)}
-              onChange={(e) => handleItemChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-            />
-          </div>
-        ))}
+      <div className="todo-container">
+        <h2 className="todo-title">My To Do</h2>
+
+        {/* Input Form */}
+        <form onSubmit={handleAddTodo} className="todo-form">
+          <input type="text" className="todo-input" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Add new task" name="task" />
+          <button type="submit" className="add-button">+</button>
+        </form>
+
+        {/* Todo List Display */}
+        <ul className="item-list">
+          {todos.length === 0 ? (<p className="empty-message">No tasks yet! Add one above.</p>) : (
+            todos.map((todo) => (
+              
+              <TodoItem key={todo.id} id={todo.id} text={todo.text} completed={todo.completed} handleToggleTodo={handleToggleTodo} 
+              handleDeleteTodo={handleDeleteTodo} editState={editState} setEditState={setEditState} editIdRef={editIdRef} handleEditTodo={handleEditTodo}/>
+            ))
+            
+          )}
+        </ul>
       </div>
 
-      {props.isExpanded && (
-        <div className="form-actions">
-          <button type="button" className="form-button" onClick={props.handleSave}>Save</button>
-          <button type="button" className="form-button" onClick={props.handleClose}>Close</button>
-        </div>
-      )}
-    </form>
+      <TodoCount todos={todos}/>
+    </section>
   );
 }
 
-function TodoItem(props) {
+function TodoItem({ id, text, completed, handleToggleTodo, handleDeleteTodo, editState, setEditState, editIdRef, handleEditTodo }) {
   return (
-    <li className="todo-card" onDoubleClick={() => props.editHandler(props.id)}>
-      <div className="todo-card-body">
-        <div className="todo-card-title">{props.title}</div>
-        
-        {/* Render checklist items */}
-        <div className="todo-card-checklist">
-          {props.noteItems && props.noteItems.map((item) => (
-            <label key={item.id} className="checklist-row">
-              <input
-                type="checkbox"
-                checked={item.completed}
-                onChange={() => props.toggleTaskHandler(props.id, item.id)}
-              />
-              <span className={item.completed ? 'completed-text' : ''}>
-                {item.text}
-              </span>
-            </label>
-          ))}
+    <li key={id} className="todo-item">
+      <div className="todo-content" onDoubleClick={() => { setEditState([true, id]); }}>
+        {/* onClick={() => handleToggleTodo(id)} */}
+        <div className='todo-checkbox-container'>
+          <input type="checkbox" checked={completed} onChange={() => handleToggleTodo(id)} className="todo-checkbox" />
         </div>
+        {(editState[0]==true && editState[1]==id) ? (<textarea type="text" className={`todo-text ${completed ? 'completed' : ''}`} name='text-content' onChange={(e) => editIdRef.current = e.target.value}>{text}</textarea>) : (
+          <span className={`todo-text ${completed ? 'completed' : ''}`}>{text}</span>)
+        }
       </div>
-
-      <button onClick={() => props.editHandler(props.id)} className="edit-btn">Edit</button>
-      <button onClick={() => props.deleteHandler(props.id)} className="delete-btn">Delete</button>
+      <div className='button-container'>
+        {(editState[0]==true && editState[1]==id) ? (
+          <button onClick={() => handleEditTodo(id)} className="custom-button save-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+          </svg>
+        </button>) : (
+          <button onClick={() => handleDeleteTodo(id)} className="custom-button delete-button">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>)}
+      </div>
     </li>
   );
 }
 
-export default function TodoApp() {
-  const [todos, setTodos] = useState(() => {
-    try {
-      const saved = localStorage.getItem('my_todos');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [title, setTitle] = useState('');
-  
-  // Default to one empty line item
-  const [noteItems, setNoteItems] = useState([
-    { id: Date.now(), text: '', completed: false }
-  ]);
-
-  const formRef = useRef(null);
-  const editRef = useRef(null);
-
-  useEffect(() => {
-    localStorage.setItem('my_todos', JSON.stringify(todos));
-  }, [todos]);
-
-  const resetForm = () => {
-    setTitle('');
-    setNoteItems([{ id: Date.now(), text: '', completed: false }]);
-    editRef.current = null;
-    setIsExpanded(false);
-  };
-
-  const saveTodo = (id) => {
-    // Filter out completely empty lines
-    const cleanedItems = noteItems.filter((item) => item.text.trim() !== '');
-    const trimmedTitle = title.trim();
-
-    if (!trimmedTitle && cleanedItems.length === 0) {
-      resetForm();
-      return;
-    }
-
-    if (!id) {
-      const newTodo = {
-        id: Date.now(),
-        title: trimmedTitle || 'Untitled Note',
-        noteItems: cleanedItems,
-      };
-      setTodos((prev) => [newTodo, ...prev]);
-    } else {
-      setTodos((prev) =>
-        prev.map((item) =>
-          item.id === id
-            ? { ...item, title: trimmedTitle || 'Untitled Note', noteItems: cleanedItems }
-            : item
-        )
-      );
-    }
-
-    resetForm();
-  };
-
-  // Direct toggle on a saved card item
-  const handleToggleTask = (todoId, taskId) => {
-    setTodos((prev) =>
-      prev.map((todo) => {
-        if (todo.id !== todoId) return todo;
-        return {
-          ...todo,
-          noteItems: todo.noteItems.map((task) =>
-            task.id === taskId ? { ...task, completed: !task.completed } : task
-          ),
-        };
-      })
-    );
-  };
-
-  const handleEditTodo = (id) => {
-    const todoItem = todos.find((todo) => todo.id === id);
-    if (!todoItem) return;
-
-    setTitle(todoItem.title);
-    setNoteItems(
-      todoItem.noteItems.length > 0
-        ? todoItem.noteItems
-        : [{ id: Date.now(), text: '', completed: false }]
-    );
-    editRef.current = id;
-    setIsExpanded(true);
-  };
-
-  return (
-    <div style={{ padding: '20px' }}>
-      <div className="form-container" ref={formRef}>
-        <TodoForm
-          isExpanded={isExpanded}
-          noteItems={noteItems}
-          title={title}
-          setIsExpanded={setIsExpanded}
-          setNoteItems={setNoteItems}
-          setTitle={setTitle}
-          handleSave={() => saveTodo(editRef.current)}
-          handleClose={resetForm}
-        />
-      </div>
-
-      <div className="todo-list-container">
-        <ul className="todo-list">
-          {todos.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              id={todo.id}
-              title={todo.title}
-              noteItems={todo.noteItems}
-              deleteHandler={(id) => setTodos((prev) => prev.filter((t) => t.id !== id))}
-              editHandler={handleEditTodo}
-              toggleTaskHandler={handleToggleTask}
-            />
-          ))}
-        </ul>
-      </div>
-    </div>
+function TodoCount({todos}){
+  const countArray = todos.map((todo)=>(todo.completed === false));
+  return(
+    <p className='todo-count'>Your remaining todos : {countArray.length}</p>
   );
 }
