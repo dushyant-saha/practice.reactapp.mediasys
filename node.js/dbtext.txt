@@ -1,0 +1,42 @@
+* Query to show current databases:
+Show databases
+
+* Creating a db:
+create database name_of_db;
+
+* To check the selected database:
+select database;
+
+* To select a database:
+use database_name;
+
+* To Delete a database:
+drop database name_of_database;
+
+* Basic structure of a table query:
+name_of_column Datatype Constraints and DefaultValue
+example: name Varchar(255) not null default('n/a')
+
+* Adding a new column:
+Alter table name_of_table add column_name data_type constraint default_value;
+
+* Deleting an attribute:
+Alter table table_name drop column_name;
+
+* Modifying:
+Alter table table_name modify column_name data_type constraint default_value;
+
+* Changing table column name:
+Alter table table_name change old_column_name new_column_name data_type constraint default_value;
+
+* Changing table name:
+Alter table table_name Rename to new_table_name
+
+* Drop table:
+Drop table table_name;
+
+
+use test;
+INSERT INTO persons
+-- lastname,  firstname, address, city
+VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
