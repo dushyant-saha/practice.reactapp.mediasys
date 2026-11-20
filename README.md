@@ -1,4 +1,4 @@
-# mediasys.practice
+# React practice during Mediasys probation  
 
 Practice repository for mediasys tasks
 
